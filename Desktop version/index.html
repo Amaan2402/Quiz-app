@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700&family=Mukta:wght@400;500;600&family=Poppins:wght@500;600&family=Vollkorn:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+    <div class="mainBox">    
+        <div class="quiz-head">
+            <h1>Quiz Game</h1>
+            <button>Start game</button>
+            <p class="nextques" style="font-size: 25px; font-family: 'Mukta', sans-serif; ">Next question in <span id="next-ques-count"></span> seconds</p>
+        </div>
+
+        <div class="question-div">
+            <h2 style="font-size: 24px; font-family: 'Poppins', sans-serif; font-weight: 600; padding-right: 1px; ">Question</h2>
+        </div>
+        
+        <div class="options-box options-display">
+            <ul class="options-list">
+                <li class="options" id="option-one"></li>
+                <li class="options" id="option-two"></li>
+                <li class="options" id="option-three"></li>
+                <li class="options" id="option-four"></li>
+            </ul>
+
+            <div class="rulesBox">
+                <h1>Quiz Instructions</h1>
+                <ul>
+                    <li style="margin-top: -10px;">Press Start button and game will begin in <b>6 seconds</b></li>
+                    <li>Total of <b>10 questions</b> will be displayed</li>
+                    <li>You will get <b>7 seconds</b> to guess the answer for each question</li>
+                    <li>Once the option is selected, <b>it cannot be changed</b></li>
+                    <li>For each correct answer you get <b>5 points</b></li>
+                </ul>
+            </div>
+
+            <div class="score-box">
+                <p class="score">Score : </p>
+                <p class="Incorrect-ans">Incorrect answers : </p>
+                <p class="correct-ans">Correct answers : </p>
+            </div>
+        </div>
+    </div>
+
+    <i class="bi bi-check-lg tick-png"></i>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
