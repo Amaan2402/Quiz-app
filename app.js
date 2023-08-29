@@ -1,5 +1,7 @@
 let url = ("https://opentdb.com/api.php?amount=10&difficulty=medium&type=multiple&token=474e0736ee493724fc481c4cdd72f74efc73f3e05f657ee8bb61f97edea77e10")
 
+let gameOver= false;
+
 let startBtn = document.querySelector("button");
 let question = document.querySelector("h2");
 
@@ -9,6 +11,16 @@ let optionTwo = document.querySelector("#option-two")
 let optionThree = document.querySelector("#option-three")
 let optionFour = document.querySelector("#option-four")
 let nextQues = document.querySelector(".nextques")
+
+let scoreBox = document.querySelector(".score-box");
+
+let tick = document.querySelector(".tick-png");
+
+let optionList = document.querySelector(".options-list");
+let rulesBox = document.querySelector(".rulesBox");
+
+optionList.classList.add("display-none");
+scoreBox.classList.add("display-none")
 
 let selectedAns;
 let answerData;
@@ -22,7 +34,23 @@ let answerIndex = 0;
 let optionIndex = 0;
 let questionIndex = 0;
 
+
+let score = document.querySelector(".score");
+let incAns = document.querySelector(".Incorrect-ans");
+let corrAns = document.querySelector(".correct-ans");
+let corectArray = [];
+let incorrectArray = [];
+
 let optionSelected = false;
+
+tick.classList.add("visibility-hidden")
+
+let icons = document.querySelectorAll("i");
+icons.forEach(icon => {
+    // icon.classList.add("display-none")    
+});
+
+// optionOne.firstChild.classList.remove("display-none")
 
 nextQues.classList.add("display-none")
 question.classList.add("visibility-hidden");
@@ -41,7 +69,6 @@ function gameTimer(count) {
 
 function nextQuesTimer (count) {
     nextQues.classList.remove("display-none");
-    // nextQues.innerText = `Next question in ${count} seconds`;
     let countPlaceholder = document.getElementById("next-ques-count");
     countPlaceholder.textContent = count;
     countPlaceholder.style.fontWeight = "bolder";
@@ -59,6 +86,7 @@ function nextQuesTimer (count) {
 startBtn.addEventListener("click", ()=> {
     gameTimer(7);
     getQuestion();
+    rulesBox.classList.add("display-none")
 });
 
 function decodeEntities(input) {
@@ -70,12 +98,18 @@ async function getQuestion(){
         apiData = await axios.get(url);
         questionData = apiData.data.results[questionIndex].question
         console.log(apiData.data.results);
-        startBtn.classList.add("display-none");
+        startBtn.classList.add("visibility-hidden");
+
+        // optionList.classList.remove("display-none")
+        optionBox.removeEventListener("click", tickShow);
+        tickShow();
 
         let quesOptionInterval = setInterval(() => {
             optionSelected = false;
-
+            startBtn.classList.add("display-none");
+            
             nextQuesTimer(7);
+            optionList.classList.remove("display-none")
             questionData = apiData.data.results[questionIndex].question
             questionIndex++
             let decodedQuestion = decodeEntities(questionData);
@@ -87,24 +121,19 @@ async function getQuestion(){
             getOption();
             optionIndex++
 
-            optionBox.addEventListener("click", (event)=> {
-                if (!optionSelected) {
-                    selectedAns = event.target;
-                    selectedAns.classList.add("selected-ans-bg");
-                    optionSelected = true; // Set the flag to true
-                    if (selectedAns.innerText === answerData) {
-                        console.log("True");
-                    } else {
-                        console.log("False");
-                    }
-                }
-            });
-
-            if(questionIndex > 9) {
+            if(questionIndex >9) {
                 clearInterval(quesOptionInterval);
-                startBtn.classList.remove("display-none");
-                startBtn.innerText = "Play again";
-                nextQues.remove();
+                setTimeout(() => {
+                    startBtn.classList.remove("display-none");
+                    nextQues.classList.add("display-none");
+                    optionList.classList.add("display-none");
+                    rulesBox.classList.add("display-none");
+                    scoreBox.classList.remove("display-none");
+                    question.classList.add("display-none");
+                    calcScore();
+                }, 8000);
+
+                gameOver = true;
             }
         }, 7000);
 
@@ -122,6 +151,9 @@ async function getOption (){
         answerIndex++
 
         await optionData.push(answerData);
+    
+        // optionData.sort(() => Math.random() - 0.5);
+        optionData = optionData.sort(() => Math.random() - 0.5);
         console.log(optionData);
         console.log(answerData);
 
@@ -133,5 +165,57 @@ async function getOption (){
         console.log(error);
     }
 };
+
+// function tickShow() {
+//     optionBox.addEventListener("click", (event)=> {
+//         if (!optionSelected) {
+//             selectedAns = event.target;
+//             console.dir(selectedAns);
+//             selectedAns.appendChild(tick);
+//             optionSelected = true; // Set the flag to true
+//             if (selectedAns) {
+//                 if (selectedAns.innerText === answerData) {
+//                     console.log("True");
+//                 } else {
+//                     console.log("False");
+//                 }
+//             }}
+//     });
+// }
+
+function tickShow() {
+    optionBox.addEventListener("click", (event)=> {
+        if (!optionSelected) {
+            selectedAns = event.target.closest("li");
+            console.dir(selectedAns);
+
+            // Clone the tick icon and append it to the selected answer
+            const tickClone = tick.cloneNode(true);
+            tickClone.classList.remove("visibility-hidden");
+            selectedAns.appendChild(tickClone);
+
+            optionSelected = true; // Set the flag to true
+            if (selectedAns) {
+                if (selectedAns.innerText === answerData) {
+                    console.log("True");
+                    corectArray.push(selectedAns);
+                } else {
+                    console.log("False");
+                }
+            }
+        }
+    });
+}
+
+function calcScore () {
+    let arrLength = corectArray.length;
+
+    let finalScore = 5 * arrLength;
+    score.innerText = `Score : ${finalScore}`;
+
+    let incorrectAnsCount = 10 - arrLength;
+    incAns.innerText = `Incorrect Answers : ${incorrectAnsCount}`;
+    corrAns.innerText = `Correct Answers : ${corectArray.length}`;
+}
 
 
