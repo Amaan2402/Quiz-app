@@ -1,4 +1,4 @@
-let url = ("https://opentdb.com/api.php?amount=10&difficulty=medium&type=multiple&token=474e0736ee493724fc481c4cdd72f74efc73f3e05f657ee8bb61f97edea77e10")
+let url = ("https://opentdb.com/api.php?amount=10&difficulty=medium&type=multiple&token=8a741b9f5525797e391d14d96a7dc15219124a33b8e5f6dcacfb5ca2ad56ec7e")
 
 let gameOver= false;
 
